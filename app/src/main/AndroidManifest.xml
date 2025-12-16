@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="dev.mgks.swv.sample">
 
-    <!-- 
-      Base permissions for the Sample App.
-      INTERNET is required for almost any WebView or Network testing.
-    -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:label="Template Sample"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+        android:label="FCM Sync Sample"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true">

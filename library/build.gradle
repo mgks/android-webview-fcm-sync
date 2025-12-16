@@ -7,7 +7,7 @@ plugins {
 android {
     // Dynamic Namespace: dev.mgks.swv.template.library
     namespace "${LIB_GROUP_ID}.${LIB_ARTIFACT_ID.replace('-', '.')}"
-    compileSdk 34
+    compileSdk 36
 
     defaultConfig {
         minSdk 24
@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core-ktx:1.17.0'
+    implementation 'com.google.firebase:firebase-messaging:25.0.1'
 }
 
 // =========================================================

@@ -1,38 +1,76 @@
-# Android Library Template 📦
+# Android WebView FCM Sync
 
-A Golden Template for creating and publishing Android Libraries (Kotlin) with automatic JitPack and GitHub Packages support.
+[![](https://jitpack.io/v/mgks/android-webview-fcm-sync.svg)](https://jitpack.io/#mgks/android-webview-fcm-sync)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-## 🚀 How to use this template
+A lightweight utility to synchronize Firebase Cloud Messaging (FCM) tokens into Android WebView Cookies. This allows your server to identify the web session with the specific Android device for targeted push notifications.
 
-### 1. Clone & Rename
-1.  Click **"Use this template"** on GitHub to create a new repo (e.g., `android-biometric-gate`).
-2.  Clone your new repo.
+Extracted from the core of **[Android Smart WebView](https://github.com/mgks/Android-SmartWebView)**.
 
-### 2. Configure Identity
-Open `gradle.properties` and edit the library details:
+<img src="https://github.com/mgks/android-webview-fcm-sync/blob/main/preview.gif?raw=true" width="200">
 
-```bash
-LIB_ARTIFACT_ID=biometric-gate
-LIB_VERSION=1.0.0
-LIB_NAME=Android Biometric Gate
-LIB_DESCRIPTION=Secure biometric auth...
-LIB_URL=https://github.com/mgks/android-biometric-gate
+## The Problem
+When a user logs into your website inside a WebView, your server creates a web session. However, your server doesn't know *which* Android device ID (FCM Token) belongs to that web session.
+
+## The Solution
+This library fetches the native FCM token and injects it as a secure Cookie (`FCM_TOKEN=...`). When the WebView loads your website, your server reads this cookie and links the Web Session ID to the FCM Device Token.
+
+## Installation
+
+**Step 1. Add JitPack**
+```groovy
+repositories {
+    google()
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+}
 ```
 
-### 3. Refactor Package
-1.  Open the project in Android Studio.
-2.  Go to `library/src/main/java/dev/mgks/swv/placeholder`.
-3.  Right-click `placeholder` -> **Refactor** -> **Rename**.
-4.  Rename it to your library name (e.g., `biometric`).
-5.  Android Studio will update all package references.
+**Step 2. Add Dependency**
+```groovy
+dependencies {
+    implementation 'com.github.mgks:android-webview-fcm-sync:1.0.0'
+    implementation 'com.google.firebase:firebase-messaging:23.4.0' // Required
+}
+```
 
-### 4. Write Code
-*   Add your library code in the `library` module.
-*   Add permissions/manifest entries in `library/src/main/AndroidManifest.xml`.
-*   Use the `app` module to test your library (Edit `app/src/main/java/.../MainActivity.kt`).
+## Setup Requirements
 
-### 5. Publish
-1.  Push your changes.
-2.  Create a **Release** on GitHub (tag `v1.0.0`).
-3.  The Action will auto-publish to GitHub Packages.
-4.  JitPack will auto-pickup the release.
+Because this library relies on Firebase, your App must be configured for Firebase:
+
+1.  Add `google-services.json` to your `app/` folder.
+2.  Apply the Google Services plugin in your `app/build.gradle`:
+    ```groovy
+    plugins {
+        id 'com.android.application'
+        id 'com.google.gms.google-services'
+    }
+    ```
+
+## Usage
+
+```kotlin
+val fcmSync = SwvFcmSync()
+val myUrl = "https://my-website.com"
+
+// Call this BEFORE loading the URL (e.g. in onCreate)
+fcmSync.sync(myUrl) { token ->
+    if (token != null) {
+        // Token is now in the CookieManager
+        // Safe to load the page now
+        webView.loadUrl(myUrl)
+    }
+}
+```
+
+### Configuration
+```kotlin
+val config = SwvFcmSync.Config(
+    cookieName = "PUSH_DEVICE_ID", // Default: FCM_TOKEN
+    syncToConsole = true           // Log actions to Logcat
+)
+fcmSync.sync(url, config)
+```
+
+## License
+MIT License
