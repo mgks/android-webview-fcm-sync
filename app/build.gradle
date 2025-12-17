@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
 }
 
 // Read versions from gradle.properties
@@ -35,4 +34,13 @@ dependencies {
     implementation project(':library')
     implementation 'androidx.core:core-ktx:1.13.1'
     implementation 'androidx.appcompat:appcompat:1.7.0'
+}
+
+// CONDITIONAL FIREBASE CONFIGURATION
+// Only apply the plugin if the secret json file exists.
+// This allows JitPack to build the library without crashing on the sample app.
+if (file('google-services.json').exists()) {
+    apply plugin: 'com.google.gms.google-services'
+} else {
+    println "swv-fcm-sync: google-services.json not found. Skipping Firebase Configuration."
 }
