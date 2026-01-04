@@ -9,11 +9,7 @@ Extracted from the core of **[Android Smart WebView](https://github.com/mgks/And
 
 <img src="https://github.com/mgks/android-webview-fcm-sync/blob/main/preview.gif?raw=true" width="200">
 
-## The Problem
-When a user logs into your website inside a WebView, your server creates a web session. However, your server doesn't know *which* Android device ID (FCM Token) belongs to that web session.
-
-## The Solution
-This library fetches the native FCM token and injects it as a secure Cookie (`FCM_TOKEN=...`). When the WebView loads your website, your server reads this cookie and links the Web Session ID to the FCM Device Token.
+When users log in via a WebView, your server creates a web session but has no idea which Android device it belongs to, so you cannot reliably send push notifications later. This library fixes that gap by fetching the native FCM token and injecting it as a secure cookie, allowing your server to read it on page load and cleanly link the web session ID to the correct FCM device token.
 
 ## Installation
 
@@ -73,4 +69,8 @@ fcmSync.sync(url, config)
 ```
 
 ## License
-MIT License
+MIT
+
+> **{ github.com/mgks }**
+> 
+> ![Website Badge](https://img.shields.io/badge/Visit-mgks.dev-blue?style=flat&link=https%3A%2F%2Fmgks.dev) ![Sponsor Badge](https://img.shields.io/badge/%20%20Become%20a%20Sponsor%20%20-red?style=flat&logo=github&link=https%3A%2F%2Fgithub.com%2Fsponsors%2Fmgks)
